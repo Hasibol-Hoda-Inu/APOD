@@ -20,23 +20,23 @@ class NetworkResponse {
 class NetworkCaller{
   Future<NetworkResponse> getRequest(
       String url,
-      {Map<String, dynamic>? queryParams, String? accessToken}
+      // {Map<String, dynamic>? queryParams, String? accessToken}
       )async{
     try{
       Map<String, String> headers = {
         "content-type" : "application/json"
       };
 
-      if(accessToken != null){
-        headers["token"] = accessToken;
-      }
+      // if(accessToken != null){
+      //   headers["token"] = accessToken;
+      // }
 
-      if(queryParams != null){
-        url += "?";
-        for(String param in queryParams.keys){
-          url+= "$param=${queryParams[param]}&";
-        }
-      }
+      // if(queryParams != null){
+      //   url += "?";
+      //   for(String param in queryParams.keys){
+      //     url+= "$param=${queryParams[param]}&";
+      //   }
+      // }
 
       Uri uri = Uri.parse(url);
 
