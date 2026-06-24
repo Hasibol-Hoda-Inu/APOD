@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.6.0
   get: ^4.7.3
+  video_player: ^2.11.1
 
 dev_dependencies:
   flutter_test:

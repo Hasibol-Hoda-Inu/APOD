@@ -1,4 +1,6 @@
+import 'package:apod/controller_binder.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'home.dart';
 
@@ -7,7 +9,8 @@ class Apod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
+      initialBinding: ControllerBinder(),
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
     );
