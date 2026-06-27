@@ -1,8 +1,8 @@
-import 'package:apod/controller_binder.dart';
+import 'package:apod/app/controller_binder.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'home.dart';
+import '../ui/screens/home.dart';
 
 class Apod extends StatelessWidget {
   const Apod({super.key});

@@ -1,6 +1,6 @@
-import 'package:apod/api_service.dart';
-import 'package:apod/apod_model.dart';
-import 'package:apod/urls.dart';
+import 'package:apod/services/api_service.dart';
+import 'package:apod/data_model/apod_model.dart';
+import 'package:apod/app/urls.dart';
 import 'package:get/get.dart';
 
 class GetController extends GetxController {

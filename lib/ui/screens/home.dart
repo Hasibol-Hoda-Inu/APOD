@@ -1,13 +1,11 @@
-import 'dart:io';
-
-import 'package:apod/apod_video_controller.dart';
-import 'package:apod/get_controller.dart';
+import 'package:apod/data_model/apod_model.dart';
+import 'package:apod/ui/controllers/apod_video_controller.dart';
+import 'package:apod/ui/controllers/download_media_controller.dart';
+import 'package:apod/ui/controllers/get_controller.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:gal/gal.dart';
 
-import 'package:get/get.dart';import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   GetController callData = Get.find<GetController>();
   ApodVideoController callVideo = Get.find<ApodVideoController>();
+  DownloadMediaController dmController = Get.find<DownloadMediaController>();
+  ApodModel data = ApodModel();
 
   @override
   Widget build(BuildContext context) {
@@ -82,20 +82,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Text("Date: ${data?.date}"),
                           const SizedBox(height: 20),
-                          ElevatedButton.icon(
-                              onPressed: (){
-                                final String? mediaUrl = data?.hdurl ?? data?.url;
-                                bool isVideo = false;
-
-                                if(data?.mediaType == "video") {
-                                  isVideo = true;
-                                }
-                                if(mediaUrl != null){
-                                  downLoadMedia(mediaUrl, isVideo);
-                                }
-                              },
-                              icon: Icon(Icons.download),
-                              label: Text("Download Media")
+                          GetBuilder<DownloadMediaController>(
+                            builder: (controller){
+                              if(controller.inProgress){
+                                return Center(child: CircularProgressIndicator());
+                              }
+                               return ElevatedButton.icon(
+                                    onPressed: saveGal,
+                                    icon: Icon(Icons.download),
+                                    label: Text("Download Media")
+                                );
+                            },
                           ),
                           Text.rich(
                             TextSpan(
@@ -126,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> getApod() async {
+  Future<void> getApod() async{
     bool isSuccess = await callData.getData();
     if (isSuccess) {
       if (callData.apodModel!.mediaType == "video") {
@@ -139,23 +136,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> downLoadMedia(String url, bool isVideo)async{
-    try{
-      final response = await http.get(Uri.parse(url));
-      final tempDir = await getTemporaryDirectory();
-      final fileName = url.split("/").last;
-      final file = File("${tempDir.path}/$fileName");
-      await file.writeAsBytes(response.bodyBytes);
-
-      if(isVideo){
-        await Gal.putVideo(file.path);
-      }else{
-        await Gal.putImage(file.path);
+  Future<void> saveGal()async{
+    ApodModel? apodData = callData.apodModel;
+    if(apodData == null){
+      Get.snackbar("❌Empty: ", "No picture url found");
+    }
+    else{
+      final String? mediaUrl = apodData.hdurl ?? apodData.url;
+      bool isVideo = false;
+      if (data.mediaType == "video") {
+        isVideo = true;
       }
-      
-      Get.snackbar("Success", "Saved to gallery successfully!");
-    }catch(e){
-      Get.snackbar("Error", "Failed to save media: $e");
+
+      bool isSuccess = await dmController.downLoadMedia(mediaUrl, isVideo);
+
+      if (isSuccess) {
+        Get.snackbar("✅ Success", "Saved to gallery successfully!");
+      } else {
+        Get.snackbar("❌ Error", "Failed to save media");
+      }
     }
   }
 }

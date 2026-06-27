@@ -47,4 +47,4 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 
-lib/urls.dart
+lib/app/urls.dart
