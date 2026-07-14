@@ -67,9 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
-                    const SizedBox(height: 20),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                       child: Column(
                         children: [
                           Text(
@@ -90,21 +89,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                return ElevatedButton.icon(
                                     onPressed: saveGal,
                                     icon: Icon(Icons.download),
-                                    label: Text("Download Media")
+                                    label: Text("Download Media"),
+                                 style: ElevatedButton.styleFrom(
+                                   backgroundColor: Colors.black87,
+                                   foregroundColor: Colors.white,
+                                 ),
                                 );
                             },
                           ),
+                          const SizedBox(height: 10,),
                           Text.rich(
+                            textAlign: TextAlign.justify,
                             TextSpan(
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 16,
                               ),
                               text: "Explanation: ",
                               children: <TextSpan>[
                                 TextSpan(
-                                  style: TextStyle(fontWeight: FontWeight.normal),
+                                  style: TextStyle(fontWeight: FontWeight.normal,),
                                   text: data?.explanation ?? "Explanation",
                                 ),
                               ],
@@ -151,7 +156,10 @@ class _HomeScreenState extends State<HomeScreen> {
       bool isSuccess = await dmController.downLoadMedia(mediaUrl, isVideo);
 
       if (isSuccess) {
-        Get.snackbar("✅ Success", "Saved to gallery successfully!");
+        Get.snackbar("✅ Success", "Saved to gallery successfully!",
+            backgroundColor: Colors.white,
+            duration: Duration(seconds: 3),
+        );
       } else {
         Get.snackbar("❌ Error", "Failed to save media");
       }
